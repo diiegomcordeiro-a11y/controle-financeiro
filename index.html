@@ -94,6 +94,23 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
 @media(max-width:768px){
  body{padding:15px}
  .top-grid{grid-template-columns:1fr}
+
+ /* Aumenta inputs e selects no mobile */
+ input, select, button{
+   padding:12px;
+   font-size:16px;
+ }
+
+ /* Ajusta grid de formulários para ficar mais confortável */
+ .form-grid{
+   grid-template-columns:1fr !important;
+ }
+
+ /* Aumenta altura de linhas da tabela */
+ table th, table td{
+   padding:12px 8px;
+   font-size:14px;
+ }
 }
 </style>
 </head>
