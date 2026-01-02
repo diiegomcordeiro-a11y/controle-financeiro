@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Controle Financeiro</title>
+
+<style>
+:root{
+ --card:#12182b;--primary:#00e0ff;
+ --text:#e5e7eb;--border:#1f2937;
+ --danger:#ff4d4d;--ok:#22c55e;--warn:#facc15;
+}
+body{
+ margin:0;font-family:Segoe UI,Roboto,Arial;
+ background:linear-gradient(120deg,#050714,#0b0f1a);
+ color:var(--text);padding:30px;
+}
+.container{max-width:1200px;margin:auto}
+h1{text-align:center;color:var(--primary)}
+
+.card{
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:14px;
+ padding:14px;
+ margin-top:15px
+}
+
+/* TOPO */
+.top-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:15px;
+}
+
+/* META */
+.card.meta.ok{border-color:var(--ok)}
+.card.meta.warn{border-color:var(--warn);animation:pulseWarn 1.6s infinite}
+.card.meta.danger{border-color:var(--danger);animation:pulseDanger 1.2s infinite,shake .4s infinite}
+
+@keyframes pulseWarn{
+ 0%{box-shadow:0 0 0 0 rgba(250,204,21,.5)}
+ 70%{box-shadow:0 0 0 12px rgba(250,204,21,0)}
+ 100%{box-shadow:0 0 0 0}
+}
+@keyframes pulseDanger{
+ 0%{box-shadow:0 0 0 0 rgba(255,77,77,.6)}
+ 70%{box-shadow:0 0 0 14px rgba(255,77,77,0)}
+ 100%{box-shadow:0 0 0 0}
+}
+@keyframes shake{
+ 0%,100%{transform:translateX(0)}
+ 25%{transform:translateX(-3px)}
+ 75%{transform:translateX(3px)}
+}
+
+.form-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+ gap:10px
+}
+.form-grid.small{grid-template-columns:1fr 60px}
+
+input,select{
+ background:#0b1020;border:1px solid var(--border);
+ border-radius:10px;padding:8px;color:var(--text)
+}
+button{
+ border:none;border-radius:8px;
+ padding:8px 10px;font-weight:bold;cursor:pointer
+}
+.btn-add{background:linear-gradient(135deg,#00e0ff,#00aaff);color:#000}
+.btn-edit{background:#1f2937;color:var(--primary)}
+.btn-delete{background:var(--danger);color:#fff}
+.btn-save{background:#22c55e;color:#000}
+.btn-cancel{background:#374151;color:#fff}
+
+.summary{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ gap:15px
+}
+.summary span{font-size:22px;color:var(--primary)}
+
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{
+ padding:10px;border-bottom:1px solid var(--border);
+ text-align:center
+}
+th{color:var(--primary);font-size:12px;text-transform:uppercase}
+
+/* MOBILE */
+@media(max-width:768px){
+ body{padding:15px}
+ .top-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>Controle Financeiro</h1>
+
+<!-- TOPO -->
+<div class="top-grid">
+
+ <!-- CATEGORIA -->
+ <div class="card">
+  <div class="form-grid small">
+   <input id="novaCategoria" placeholder="Nova categoria">
+   <button class="btn-add" onclick="adicionarCategoria()">+</button>
+  </div>
+ </div>
+
+ <!-- META -->
+ <div id="cardMeta" class="card meta ok">
+  <div class="form-grid">
+   <input id="valorMeta" type="number" step="0.01" placeholder="Meta mensal R$">
+   <button class="btn-add" onclick="salvarMeta()">OK</button>
+  </div>
+  <small>
+   Meta: R$ <b><span id="metaValor">0.00</span></b> |
+   Restante: R$ <b><span id="metaRestante">0.00</span></b>
+  </small>
+ </div>
+
+</div>
+
+<!-- GASTOS -->
+<div class="card">
+<div class="form-grid">
+<input id="descricao" placeholder="Descrição">
+<input id="valor" type="number" step="0.01" placeholder="Valor">
+<select id="categoria"></select>
+<select id="pagamento">
+<option>Pix</option><option>Crédito</option><option>Débito</option>
+</select>
+<input id="data" type="date">
+<button class="btn-add" onclick="adicionar()">Adicionar gasto</button>
+</div>
+</div>
+
+<!-- FILTROS -->
+<div class="card">
+<div class="form-grid">
+<select id="fMes" onchange="renderizar()"></select>
+<select id="fAno" onchange="renderizar()"></select>
+<select id="fCategoria" onchange="renderizar()"></select>
+<select id="fPagamento" onchange="renderizar()">
+<option value="">Todos pagamentos</option>
+<option>Pix</option><option>Crédito</option><option>Débito</option>
+</select>
+</div>
+</div>
+
+<div class="summary">
+<div class="card">Hoje <span>R$ <span id="totalHoje">0.00</span></span></div>
+<div class="card">Semana <span>R$ <span id="totalSemana">0.00</span></span></div>
+<div class="card">Mês <span>R$ <span id="totalMes">0.00</span></span></div>
+<div class="card">Total <span>R$ <span id="totalGeral">0.00</span></span></div>
+</div>
+
+<div class="card table-wrap">
+<table>
+<thead>
+<tr>
+<th>Descrição</th><th>Categoria</th><th>Valor</th>
+<th>Pagamento</th><th>Data</th><th>Ações</th>
+</tr>
+</thead>
+<tbody id="lista"></tbody>
+</table>
+</div>
+
+</div>
+
+<script>
+let gastos=JSON.parse(localStorage.getItem("gastos"))||[];
+let categorias=JSON.parse(localStorage.getItem("categorias"))||
+["Alimentação","Transporte","Casa","Lazer","Assinaturas","Outros"];
+let meta=parseFloat(localStorage.getItem("meta"))||0;
+let editIndex=null;
+data.valueAsDate=new Date();
+
+function salvar(){
+ localStorage.setItem("gastos",JSON.stringify(gastos));
+ localStorage.setItem("categorias",JSON.stringify(categorias));
+ localStorage.setItem("meta",meta);
+ carregarFiltros();renderizar();
+}
+function salvarMeta(){meta=parseFloat(valorMeta.value)||0;salvar();}
+
+function carregarCategorias(){
+ categoria.innerHTML=categorias.map(c=>`<option>${c}</option>`).join("");
+ fCategoria.innerHTML='<option value="">Todas categorias</option>'+
+ categorias.map(c=>`<option>${c}</option>`).join("");
+}
+function adicionarCategoria(){
+ const n=novaCategoria.value.trim();
+ if(!n||categorias.includes(n))return;
+ categorias.push(n);novaCategoria.value="";salvar();
+}
+
+function criarDataLocal(s){const[a,m,d]=s.split("-");return new Date(a,m-1,d);}
+function formatarDataBR(s){const[a,m,d]=s.split("-");return`${d}/${m}/${a}`;}
+
+function adicionar(){
+ if(!descricao.value||!valor.value||!data.value)return;
+ gastos.push({
+  descricao:descricao.value,
+  valor:+valor.value,
+  categoria:categoria.value,
+  pagamento:pagamento.value,
+  data:data.value
+ });
+ descricao.value="";valor.value="";salvar();
+}
+
+function editar(i){editIndex=i;renderizar();}
+function cancelarEdicao(){editIndex=null;renderizar();}
+function excluir(i){
+ if(confirm("Excluir gasto?")){
+  gastos.splice(i,1);
+  salvar();
+ }
+}
+function salvarEdicao(i){
+ const r=document.getElementById(`edit-${i}`);
+ gastos[i]={
+  descricao:r.querySelector(".e-desc").value,
+  categoria:r.querySelector(".e-cat").value,
+  valor:+r.querySelector(".e-val").value,
+  pagamento:r.querySelector(".e-pag").value,
+  data:r.querySelector(".e-data").value
+ };
+ editIndex=null;salvar();
+}
+
+function passaFiltro(g){
+ const d=criarDataLocal(g.data);
+ if(fMes.value&&d.getMonth()+1!=fMes.value)return false;
+ if(fAno.value&&d.getFullYear()!=fAno.value)return false;
+ if(fCategoria.value&&g.categoria!=fCategoria.value)return false;
+ if(fPagamento.value&&g.pagamento!=fPagamento.value)return false;
+ return true;
+}
+
+function renderizar(){
+ lista.innerHTML="";
+ let hojeT=0,semT=0,mesT=0,geralT=0;
+ const hoje=new Date();hoje.setHours(0,0,0,0);
+ const iniSemana=new Date(hoje);iniSemana.setDate(hoje.getDate()-hoje.getDay());
+
+ gastos.filter(passaFiltro).forEach((g,i)=>{
+  const d=criarDataLocal(g.data);geralT+=g.valor;
+  if(d.getTime()===hoje.getTime())hojeT+=g.valor;
+  if(d>=iniSemana)semT+=g.valor;
+  if((!fMes.value||d.getMonth()+1==fMes.value)&&
+     (!fAno.value||d.getFullYear()==fAno.value))mesT+=g.valor;
+
+  if(i===editIndex){
+   lista.innerHTML+=`
+<tr id="edit-${i}">
+<td><input class="e-desc" value="${g.descricao}"></td>
+<td><select class="e-cat">${categorias.map(c=>`<option ${c===g.categoria?"selected":""}>${c}</option>`).join("")}</select></td>
+<td><input class="e-val" type="number" step="0.01" value="${g.valor}"></td>
+<td>
+<select class="e-pag">
+<option ${g.pagamento==="Pix"?"selected":""}>Pix</option>
+<option ${g.pagamento==="Crédito"?"selected":""}>Crédito</option>
+<option ${g.pagamento==="Débito"?"selected":""}>Débito</option>
+</select>
+</td>
+<td><input class="e-data" type="date" value="${g.data}"></td>
+<td>
+<button class="btn-save" onclick="salvarEdicao(${i})">Salvar</button>
+<button class="btn-cancel" onclick="cancelarEdicao()">Cancelar</button>
+</td>
+</tr>`;
+  } else {
+   lista.innerHTML+=`
+<tr>
+<td>${g.descricao}</td>
+<td>${g.categoria}</td>
+<td>R$ ${g.valor.toFixed(2)}</td>
+<td>${g.pagamento}</td>
+<td>${formatarDataBR(g.data)}</td>
+<td>
+<button class="btn-edit" onclick="editar(${i})">✏️</button>
+<button class="btn-delete" onclick="excluir(${i})">🗑</button>
+</td>
+</tr>`;
+  }
+ });
+
+ totalHoje.textContent=hojeT.toFixed(2);
+ totalSemana.textContent=semT.toFixed(2);
+ totalMes.textContent=mesT.toFixed(2);
+ totalGeral.textContent=geralT.toFixed(2);
+
+ metaValor.textContent=meta.toFixed(2);
+ const restante=meta-mesT;
+ metaRestante.textContent=restante.toFixed(2);
+
+ const card=document.getElementById("cardMeta");
+ card.className="card meta "+(restante<0?"danger":mesT/meta>=0.7?"warn":"ok");
+}
+
+function carregarFiltros(){
+ const meses=new Set(),anos=new Set();
+ gastos.forEach(g=>{
+  const d=criarDataLocal(g.data);
+  meses.add(d.getMonth()+1);anos.add(d.getFullYear());
+ });
+ fMes.innerHTML='<option value="">Todos os meses</option>';
+ [...meses].sort().forEach(m=>fMes.innerHTML+=`<option>${m}</option>`);
+ fAno.innerHTML='<option value="">Todos os anos</option>';
+ [...anos].sort((a,b)=>b-a).forEach(a=>fAno.innerHTML+=`<option>${a}</option>`);
+}
+
+carregarCategorias();
+carregarFiltros();
+renderizar();
+</script>
+</body>
+</html>
