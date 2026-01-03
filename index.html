@@ -79,11 +79,11 @@ button{
  flex-direction:column;
  justify-content:center;
  align-items:center;
- font-size:28px; /* aumentei */
+ font-size:28px; 
  font-weight:bold;
 }
 .summary span{
- font-size:36px; /* aumentei o valor */
+ font-size:36px; 
  color:var(--primary);
 }
 
@@ -91,51 +91,52 @@ button{
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;margin-top:20px}
 th,td{
- padding:10px;border-bottom:1px solid var(--border);
- text-align:center
+ padding:16px;border-bottom:1px solid var(--border); /* aumentei padding */
+ text-align:center;
+ font-size:20px; /* aumentei a fonte */
 }
-th{color:var(--primary);font-size:12px;text-transform:uppercase}
+th{color:var(--primary);font-size:20px;text-transform:uppercase;}
 
 /* NOVA CATEGORIA - MAIOR */
 .card .form-grid.small input {
-  padding: 20px;
-  font-size: 22px;
+  padding: 24px;
+  font-size: 26px;
 }
 .card .form-grid.small button {
-  padding: 20px 24px;
-  font-size: 22px;
+  padding: 24px 28px;
+  font-size: 26px;
 }
 
 /* META MENSAL - MAIOR */
 #cardMeta input {
-  padding: 20px;
-  font-size: 22px;
+  padding: 24px;
+  font-size: 26px;
 }
 #cardMeta button {
-  padding: 20px 24px;
-  font-size: 22px;
+  padding: 24px 28px;
+  font-size: 26px;
 }
 #cardMeta small {
-  font-size: 22px;
+  font-size: 24px;
 }
 #cardMeta b {
-  font-size: 28px;
+  font-size: 30px;
 }
 
 /* FORMULARIO GASTOS - LAYOUT VERTICAL DENTRO DE CADA COLUNA */
 #gastos .form-grid {
  display:grid;
- grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
- gap:20px;
+ grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+ gap:24px; /* mais espaço entre colunas */
 }
 #gastos .form-grid > div {
  display:flex;
  flex-direction:column;
- gap:10px;
+ gap:14px; /* mais espaço entre inputs */
 }
 #gastos input, #gastos select, #gastos button {
- font-size:26px; /* Aumentei a fonte */
- padding:18px;   /* Aumentei padding */
+ font-size:28px; /* Aumentei a fonte ainda mais */
+ padding:22px;   /* Aumentei padding */
 }
 
 /* MOBILE */
@@ -143,18 +144,18 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
  body{padding:15px}
 
  input, select, button{
-   padding:22px;
-   font-size:24px;
+   padding:28px;
+   font-size:26px;
  }
 
  .form-grid{
    grid-template-columns:1fr !important;
-   gap:16px;
+   gap:18px;
  }
 
  table th, table td{
-   padding:20px 14px;
-   font-size:18px;
+   padding:22px 14px;
+   font-size:22px;
  }
 
  .summary{
@@ -162,16 +163,16 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
    gap:16px;
  }
  .summary div{
-   padding:24px;
-   font-size:24px;
+   padding:28px;
+   font-size:26px;
  }
  .summary span{
-   font-size:32px;
+   font-size:34px;
  }
 
  /* GASTOS FORMULÁRIO VERTICAL */
  #gastos .form-grid > div{
-  gap:12px;
+  gap:14px;
  }
 }
 
@@ -180,8 +181,8 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
  body{padding:12px}
 
  input, select, button{
-   padding:28px;
-   font-size:28px; /* aumentei para ultra mobile */
+   padding:32px;
+   font-size:30px; /* ainda maior para ultra mobile */
  }
 
  .form-grid{
@@ -190,8 +191,8 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
  }
 
  table th, table td{
-   padding:24px 16px;
-   font-size:20px;
+   padding:28px 16px;
+   font-size:24px; /* aumentei */
  }
 
  .summary{
@@ -199,16 +200,16 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
    gap:18px;
  }
  .summary div{
-   padding:30px;
-   font-size:26px;
+   padding:32px;
+   font-size:28px;
  }
  .summary span{
-   font-size:36px;
+   font-size:38px;
  }
 
  /* GASTOS FORMULÁRIO VERTICAL */
  #gastos .form-grid > div{
-  gap:14px;
+  gap:16px;
  }
 }
 </style>
