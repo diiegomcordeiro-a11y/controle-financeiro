@@ -52,15 +52,15 @@ h1{text-align:center;color:var(--primary)}
  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
  gap:10px
 }
-.form-grid.small{grid-template-columns:1fr 60px}
+.form-grid.small{grid-template-columns:1fr 80px} /* botão maior */
 
 input,select{
  background:#0b1020;border:1px solid var(--border);
- border-radius:10px;padding:8px;color:var(--text)
+ border-radius:10px;padding:8px;color:var(--text);font-size:16px;
 }
 button{
  border:none;border-radius:8px;
- padding:8px 10px;font-weight:bold;cursor:pointer
+ padding:8px 10px;font-weight:bold;cursor:pointer;font-size:16px;
 }
 .btn-add{background:linear-gradient(135deg,#00e0ff,#00aaff);color:#000}
 .btn-edit{background:#1f2937;color:var(--primary)}
@@ -82,6 +82,32 @@ th,td{
  text-align:center
 }
 th{color:var(--primary);font-size:12px;text-transform:uppercase}
+
+/* NOVA CATEGORIA - MAIOR */
+.card .form-grid.small input {
+  padding: 14px;
+  font-size: 18px;
+}
+.card .form-grid.small button {
+  padding: 14px 18px;
+  font-size: 18px;
+}
+
+/* META MENSAL - MAIOR */
+#cardMeta input {
+  padding: 14px;
+  font-size: 18px;
+}
+#cardMeta button {
+  padding: 14px 18px;
+  font-size: 18px;
+}
+#cardMeta small {
+  font-size: 18px;
+}
+#cardMeta b {
+  font-size: 20px;
+}
 
 /* MOBILE */
 @media(max-width:768px){
