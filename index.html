@@ -122,6 +122,22 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
   font-size: 28px;
 }
 
+/* FORMULARIO GASTOS - LAYOUT VERTICAL DENTRO DE CADA COLUNA */
+#gastos .form-grid {
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+ gap:20px;
+}
+#gastos .form-grid > div {
+ display:flex;
+ flex-direction:column;
+ gap:6px;
+}
+#gastos input, #gastos select, #gastos button {
+ font-size:20px;
+ padding:14px;
+}
+
 /* MOBILE */
 @media(max-width:768px){
  body{padding:15px}
@@ -151,6 +167,11 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
  }
  .summary span{
    font-size:32px;
+ }
+
+ /* GASTOS FORMULÁRIO VERTICAL */
+ #gastos .form-grid > div{
+  gap:8px;
  }
 }
 
@@ -184,6 +205,11 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
  .summary span{
    font-size:36px;
  }
+
+ /* GASTOS FORMULÁRIO VERTICAL */
+ #gastos .form-grid > div{
+  gap:10px;
+ }
 }
 </style>
 </head>
@@ -213,16 +239,22 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
 </div>
 
 <!-- GASTOS -->
-<div class="card">
+<div class="card" id="gastos">
 <div class="form-grid">
-<input id="descricao" placeholder="Descrição">
-<input id="valor" type="number" step="0.01" placeholder="Valor">
-<select id="categoria"></select>
-<select id="pagamento">
-<option>Pix</option><option>Crédito</option><option>Débito</option>
-</select>
-<input id="data" type="date">
-<button class="btn-add" onclick="adicionar()">Adicionar gasto</button>
+  <div>
+    <input id="descricao" placeholder="Descrição">
+    <input id="valor" type="number" step="0.01" placeholder="Valor">
+  </div>
+  <div>
+    <select id="categoria"></select>
+    <select id="pagamento">
+      <option>Pix</option><option>Crédito</option><option>Débito</option>
+    </select>
+  </div>
+  <div>
+    <input id="data" type="date">
+    <button class="btn-add" onclick="adicionar()">Adicionar gasto</button>
+  </div>
 </div>
 </div>
 
@@ -239,7 +271,7 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
 </div>
 </div>
 
-<!-- SUMMARY 2 LINHAS - LETRAS MAIORES -->
+<!-- SUMMARY 2 LINHAS -->
 <div class="summary">
 <div class="card">Hoje <span>R$ <span id="totalHoje">0.00</span></span></div>
 <div class="card">Semana <span>R$ <span id="totalSemana">0.00</span></span></div>
