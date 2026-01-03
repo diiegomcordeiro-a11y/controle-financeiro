@@ -68,15 +68,26 @@ button{
 .btn-save{background:#22c55e;color:#000}
 .btn-cancel{background:#374151;color:#fff}
 
-/* SUMMARY GRID 2 LINHAS */
+/* SUMMARY GRID 2 LINHAS - FONTES MAIORES */
 .summary{
  display:grid;
  grid-template-columns:repeat(2,1fr);
  gap:15px;
 }
-.summary div{display:flex;justify-content:center;align-items:center;}
-.summary span{font-size:22px;color:var(--primary)}
+.summary div{
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ font-size:28px; /* aumentei */
+ font-weight:bold;
+}
+.summary span{
+ font-size:36px; /* aumentei o valor */
+ color:var(--primary);
+}
 
+/* TABLE */
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;margin-top:20px}
 th,td{
@@ -136,11 +147,10 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
  }
  .summary div{
    padding:24px;
-   font-size:22px;
+   font-size:24px;
  }
-
  .summary span{
-   font-size:30px;
+   font-size:32px;
  }
 }
 
@@ -169,11 +179,10 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
  }
  .summary div{
    padding:30px;
-   font-size:24px;
+   font-size:26px;
  }
-
  .summary span{
-   font-size:34px;
+   font-size:36px;
  }
 }
 </style>
@@ -230,7 +239,7 @@ th{color:var(--primary);font-size:12px;text-transform:uppercase}
 </div>
 </div>
 
-<!-- SUMMARY 2 LINHAS -->
+<!-- SUMMARY 2 LINHAS - LETRAS MAIORES -->
 <div class="summary">
 <div class="card">Hoje <span>R$ <span id="totalHoje">0.00</span></span></div>
 <div class="card">Semana <span>R$ <span id="totalSemana">0.00</span></span></div>
